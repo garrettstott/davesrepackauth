@@ -13,7 +13,7 @@ const SiteAdminAccess = UserAuthWrapper({
   wrapperDisplayName: 'UserIsSiteAdmin'
 })
 
-//We could possible have admins who are not site admins but site admins should also be able to view this content
+//We could have admins who are not site admins but site admins should also be able to view this content
 const AdminAccess = UserAuthWrapper({
   authSelector: state => state.user,
   predicate: user => {
@@ -34,8 +34,8 @@ export default (
          {/* Site admin only routes */}
         </Route>
       </IndexRoute>
-      {/* NO ROUTES BELOW THIS LINE */}
       <Route path="/401" status={401} component={NotAuthorized} />
+      {/* NO ROUTES BELOW THIS LINE */}
       <Route path="*" status={404} component={NoMatch}/>
     </Route>
   </Route>
