@@ -10,6 +10,19 @@ export const refreshLogin = () => {
   }
 }
 
+export const logout = () => {
+  return (dispatch) => {
+    $.ajax({
+      url: '/users/sign_out',
+      type: 'DELETE',
+      dataType: 'JSON'
+    }).done( () => {
+      dispatch(setUser({}))
+      window.location.href = '/'
+    });
+  }
+}
+
 const setUser = (user) => {
   return { type: 'USER', ...user }
 }

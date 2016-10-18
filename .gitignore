@@ -19,3 +19,4 @@
 /node_modules
 /public/webpack
 /coverage/
+npm-debug.log

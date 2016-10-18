@@ -1,10 +1,29 @@
-import React from 'react';
+import React from 'react'
+import { connect } from 'react-redux'
+import { logout } from '../actions/auth'
 
-const App = ({ children }) => (
-  <div>
-    { children }
-  </div>
-)
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.logout = this.logout.bind(this)
+  }
 
-export default App;
+  logout(e) {
+    e.preventDefault()
+    this.props.dispatch(logout())
+  }
+
+  render() {
+    return (
+      <div>
+        <nav>
+          <a style={{ cursor: 'pointer' }} onClick={this.logout}>Logout</a>
+        </nav>
+        { this.props.children }
+      </div>
+    )
+  }
+}
+
+export default connect()(App);
 
