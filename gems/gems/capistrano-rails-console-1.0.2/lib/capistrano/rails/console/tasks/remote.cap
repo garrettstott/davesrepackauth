@@ -1,0 +1,54 @@
+namespace :load do
+  task :defaults do
+    # add rails to rvm_map_bins
+    set :rvm_map_bins, fetch(:rvm_map_bins, []).push(:rails)
+  end
+end
+
+namespace :rails do
+  desc 'Interact with a remote rails console'
+  task :console do
+    on primary :app do |host|
+      test(:true) # initialize ssh_options on host
+
+      ssh_cmd_args       = []
+      rails_console_args = []
+
+      if host.ssh_options && host.ssh_options[:proxy]
+        template = host.ssh_options[:proxy].command_line_template
+        ssh_cmd_args << "-o ProxyCommand=\"#{template}\""
+      end
+
+      if host.ssh_options && host.ssh_options[:host_name]
+        ssh_cmd_args << "-o HostName=\"#{host.ssh_options[:host_name]}\""
+      end
+
+      rails_console_args << '--sandbox' if ENV.key?('sandbox') || ENV.key?('s')
+
+      rails_env = fetch(:rails_env, fetch(:stage, 'production'))
+
+      port = host.port || (host.ssh_options || {})[:port]
+      ssh_cmd_args << "-p #{port}" if port
+
+      ssh_user = if host.ssh_options && host.ssh_options[:user]
+        host.ssh_options[:user]
+      else
+        host.user
+      end
+      ssh_cmd_args << [ssh_user, host.hostname].compact.join('@')
+
+      if host.ssh_options && host.ssh_options[:keys] && host.ssh_options[:keys].length > 0
+        identity = host.ssh_options[:keys][0]
+        ssh_cmd_args << "-i #{identity}"
+      end
+
+      cmd = SSHKit::Command.new(:rails, :console, rails_env, *rails_console_args, host: host)
+
+      ssh_cmd = %Q(ssh #{ssh_cmd_args.join(' ')} -t '$SHELL -l -c "cd #{current_path} && (#{cmd.environment_string} #{cmd})"')
+
+      debug("Running #{ssh_cmd} on #{host.hostname}")
+
+      exec(ssh_cmd)
+    end
+  end
+end
