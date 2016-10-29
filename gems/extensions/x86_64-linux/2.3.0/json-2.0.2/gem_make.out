@@ -1,0 +1,13 @@
+current directory: /home/garrettstott/Documents/projects/davesrepackauth/gems/gems/json-2.0.2/ext/json
+/home/garrettstott/.rvm/rubies/ruby-2.3.1/bin/ruby -r ./siteconf20161029-3340-cfx59h.rb extconf.rb
+creating Makefile
+
+current directory: /home/garrettstott/Documents/projects/davesrepackauth/gems/gems/json-2.0.2/ext/json
+make "DESTDIR=" clean
+
+current directory: /home/garrettstott/Documents/projects/davesrepackauth/gems/gems/json-2.0.2/ext/json
+make "DESTDIR="
+make: Nothing to be done for 'all'.
+
+current directory: /home/garrettstott/Documents/projects/davesrepackauth/gems/gems/json-2.0.2/ext/json
+make "DESTDIR=" install
